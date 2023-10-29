@@ -1,27 +1,27 @@
-# Next.js + Tailwind CSS Example
+# Next.js website using Sanity.io and Next-Auth 
 
-This example shows how to use [Tailwind CSS](https://tailwindcss.com/) [(v3.2)](https://tailwindcss.com/blog/tailwindcss-v3-2) with Next.js. It follows the steps outlined in the official [Tailwind docs](https://tailwindcss.com/docs/guides/nextjs).
+### This repository contains a Next.js blog website using Sanity.io as a headless CMS, Tailwind CSS for styling, Next-Auth for authentication, and Vercel for deployment.
 
-## Deploy your own
+## Features
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-tailwindcss)
+* Lightning-fast performance
+* Structured content management
+* Tailwind CSS
+* Authentication
+* Social login
+* Form handling
+* Rich-text content
+* Easy deployment
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-tailwindcss&project-name=with-tailwindcss&repository-name=with-tailwindcss)
+## Getting started
 
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-yarn create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-```bash
-pnpm create next-app --example with-tailwindcss with-tailwindcss-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+1. Clone this repository
+2. Run the following commands:
+    ```
+    npm install
+    npm run dev
+    ```
+3. Open your browser and navigate to `http://localhost:3000`
+4. Create a new project on Vercel and connect your GitHub repository
+5. Once the project is connected, Vercel will automatically deploy the website
+6. Start creating and publishing blog posts!
