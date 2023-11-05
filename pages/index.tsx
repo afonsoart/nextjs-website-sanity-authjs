@@ -4,8 +4,17 @@ import Banner from "../components/Banner";
 import BannerBottom from "../components/BannerBottom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { sanityClient, urlFor } from "../sanity";
+import { Post } from "../typings";
+import Image from "next/image";
 
-export default function Home() {
+
+interface Props {
+  posts: [Post];
+}
+
+export default function Home({posts}: Props) {
+
   return (
     <div>
       <Head>
@@ -24,7 +33,13 @@ export default function Home() {
           <BannerBottom />
         </div>
         {/* ============ Banner-Bottom End here ======= */}
-        {/* ============ Post Part Start here ========= */}
+          {
+            posts.map((post, index)=> (
+              <div key={index}>
+                <Image src={urlFor(post.mainImage).url()!} alt="  Images" width={380} height={350}/>
+              </div>
+            ))
+          }
         <div className="max-w-7xl mx-auto py-20 px-4">Posts will go here</div>
         {/* ============ Post Part End here =========== */}
         {/* ============ Footer Start here============= */}
@@ -34,3 +49,23 @@ export default function Home() {
     </div>
   );
 }
+
+export const getServerSideProps = async () => {
+  const query = `*[_type == "post"]{
+    _id,
+      title,
+      author -> {
+        name,
+        image
+      },
+      description,
+      mainImage,
+      slug
+  }`
+  const posts = await sanityClient.fetch(query);
+  return {
+    props:{
+      posts,
+    },
+  };
+};
