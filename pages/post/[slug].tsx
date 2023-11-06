@@ -4,12 +4,40 @@ import Header from "../../components/Header"
 import { sanityClient, urlFor } from "../../sanity";
 import { Post } from "../../typings";
 import Image from "next/image";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { error } from "console";
+import { useState } from "react";
 
 interface Props {
     post: Post
 }
 
+type Inputs={
+    _id: string;
+    name: string;
+    email: string;
+    comment: string;
+
+}
+
 const Post = ({ post }: Props) => {
+    const [submitted, setSubmitted] = useState(false)
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+      } = useForm<Inputs>();
+
+      const onSubmit : SubmitHandler<Inputs> = (data)=>{
+        fetch("/api/createComment", {
+            method:"POST",
+            body:JSON.stringify(data),
+        }).then(()=>{
+         setSubmitted(true);
+        }).catch((err)=>{
+            setSubmitted(false);
+        })
+      };
     return <div>
         <Header />
         {/* main Image */}
@@ -21,7 +49,7 @@ const Post = ({ post }: Props) => {
             height={354}
         />
         {/* Article */}
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto mb-10">
             <article className="w-full mx-auto p-5 bg-secondaryColor/10">
                 <h1 className="font-titleFont font-medium text-[32px] text-primary border-b-[1px] border-b-cyan-800 mt-10 mb-3">{post.title}</h1>
                 <h2 className="font-bodyFont text-[18px] text-gray-500 mb-2">{post.description}</h2>
@@ -41,7 +69,7 @@ const Post = ({ post }: Props) => {
                     </p>
                 </div>
                 <div className="mt-10">
-                <PortableText dataset={process.env.NEXT_PUBLIC_SANITY_DATASET || "production"}
+                    <PortableText dataset={process.env.NEXT_PUBLIC_SANITY_DATASET || "production"}
                         projectId={
                             process.env.NEXT_PUBLIC_SANITY_ID || "bsrbs3xa"
                         }
@@ -49,19 +77,19 @@ const Post = ({ post }: Props) => {
                         serializers={{
                             h1: (props: any) => (
                                 <h1
-                                className="text-3xl font-bold my-5 font-titleFont"
+                                    className="text-3xl font-bold my-5 font-titleFont"
                                     {...props}
                                 />
                             ),
                             h2: (props: any) => (
                                 <h2
-                                className="text-2xl font-bold my-5 font-titleFont"
+                                    className="text-2xl font-bold my-5 font-titleFont"
                                     {...props}
                                 />
                             ),
                             h3: (props: any) => (
                                 <h3
-                                className="text-2xl font-bold my-5 font-titleFont"
+                                    className="text-2xl font-bold my-5 font-titleFont"
                                     {...props}
                                 />
                             ),
@@ -74,9 +102,62 @@ const Post = ({ post }: Props) => {
                                 </a>
                             ),
                         }}
-                        />
+                    />
                 </div>
             </article>
+            <hr className="max-w-lg my-5 mx-auto border[1px] border-secondaryColor" />
+            <div>
+                <p className="text-xs text-secondaryColor uppercase font-titleFont font-bold">Enjoyed this article?</p>
+                <h3 className=" font-titleFont text-3xl font bold">Leave a comment below!</h3>
+                <hr className="py-3 mt-2" />
+                {/* Form will start here */}
+                 {/* Generating Id for hooks form */}
+                 <input {...register("_id")}
+                 type="hidden"
+                 name="_id"
+                 value={post._id} 
+                 />
+                <form onSubmit={handleSubmit(onSubmit)} className="mt-7 flex flex-col gap-6">
+                    <label className="flex flex-col">
+                        <span className="font-titleFont font-semibold text-base">Name</span>
+                        <input
+                        {...(register("name"), {required:true})}
+                         className="text-base placeholder:text-sm border-b-[1px]
+                         border-secondaryColor py-1 px-4 outline-none focus-within:shadow-xl
+                         shadow-secondaryColor"
+                            type="text"
+                            placeholder="Enter your name"
+                        />
+                    </label>
+                    <label className="flex flex-col">
+                        <span className="font-titleFont font-semibold text-base">Email</span>
+                        <input 
+                        {...(register("email"), {required:true})}
+                        className="text-base placeholder:text-sm border-b-[1px]
+                         border-secondaryColor py-1 px-4 outline-none focus-within:shadow-xl
+                         shadow-secondaryColor"
+                            type="email"
+                            placeholder="Enter your Email"
+                        />
+                    </label>
+                    <label className="flex flex-col">
+                        <span className="font-titleFont font-semibold text-base">Comment</span>
+                        <textarea 
+                        {...(register("comment"), {required:true})}
+                        className="text-base placeholder:text-sm border-b-[1px]
+                         border-secondaryColor py-1 px-4 outline-none focus-within:shadow-xl
+                         shadow-secondaryColor"
+                            placeholder="Enter your Comments"
+                            rows={6}
+                        />
+                    </label>
+                    <button
+                        className=" w-full bg-bgColor text-white text-base font-titleFont font-semibold tracking-wide uppercase py-2 rounded-sm hover:bg-secondaryColor duration-300"
+                        type="submit">
+                        Submit
+                    </button>
+                </form>
+            </div>
         </div>
         <Footer />
     </div>
