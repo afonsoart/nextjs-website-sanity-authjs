@@ -11,6 +11,7 @@
     "@sanity/image-url": "^1.0.2",
     "@sanity/vision": "^3.18.1",
     "next": "latest",
+    "next-auth": "^4.24.4",
     "next-sanity": "^5.5.10",
     "next-sanity-image": "^6.1.0",
     "react": "18.2.0",
