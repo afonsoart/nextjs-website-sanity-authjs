@@ -1,3 +1,4 @@
+import { GetStaticProps } from "next";
 import PortableText from "react-portable-text";
 import Footer from "../../components/Footer"
 import Header from "../../components/Header"
@@ -5,7 +6,6 @@ import { sanityClient, urlFor } from "../../sanity";
 import { Post } from "../../typings";
 import Image from "next/image";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { error } from "console";
 import { useState } from "react";
 
 interface Props {
@@ -157,6 +157,17 @@ const Post = ({ post }: Props) => {
                         Submit
                     </button>
                 </form>
+                {/* Comments */}
+                <div className="w-full flex flex-col p-10 mx-auto shadow-bgColor shadow-lg space-y-2">
+                    <h3 className="text-3xl font-titleFont font-semibold">Comments</h3>
+                    <hr/>
+                    {post.comments.map((comment) => (
+                        <div key={comment._id}>
+                            <p><span className="text-secondaryColor">{comment.name}</span>{" "}{comment.comment}</p>
+                        </div>
+                    ))
+                    }
+                </div>
             </div>
         </div>
         <Footer />
@@ -184,7 +195,7 @@ export const getStaticPaths = async () => {
     };
 };
 
-export const getStaticProps: GetstaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
     const query = `*[_type == "post" && slug.current == $slug][0] {
     _id,
       publishedAt,
@@ -193,6 +204,7 @@ export const getStaticProps: GetstaticProps = async ({ params }) => {
         name,
         image,
       },
+      "comments":*[_type == "comment" && post._ref == ^._id && approved == true],
       description,
       mainImage,
       slug,
